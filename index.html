@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلسلة الغذاء في الغابة - Food Chain in Forest</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Scene Container -->
+        <div class="scene-container">
+            <canvas id="gameCanvas"></canvas>
+            
+            <!-- Scene 1: Forest Scene -->
+            <div id="scene1" class="scene active">
+                <div class="forest-background">
+                    <div class="sky"></div>
+                    <div class="sun"></div>
+                    <div class="clouds">
+                        <div class="cloud cloud1"></div>
+                        <div class="cloud cloud2"></div>
+                        <div class="cloud cloud3"></div>
+                    </div>
+                    <div class="river-container">
+                        <svg class="river" viewBox="0 0 800 600">
+                            <defs>
+                                <linearGradient id="riverGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4a90e2;stop-opacity:0.8" />
+                                    <stop offset="100%" style="stop-color:#1e4d7b;stop-opacity:0.9" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M 0 300 Q 200 250, 400 300 T 800 300 L 800 400 Q 400 450, 0 400 Z" 
+                                  fill="url(#riverGradient)" />
+                            <circle cx="100" cy="350" r="3" class="water-ripple"></circle>
+                            <circle cx="300" cy="320" r="3" class="water-ripple"></circle>
+                            <circle cx="600" cy="380" r="3" class="water-ripple"></circle>
+                        </svg>
+                    </div>
+                    <div class="trees-left">
+                        <div class="tree tree-large"></div>
+                        <div class="tree tree-medium"></div>
+                    </div>
+                    <div class="trees-right">
+                        <div class="tree tree-large"></div>
+                        <div class="tree tree-small"></div>
+                    </div>
+                    <div class="ground">
+                        <div class="grass"></div>
+                        <div class="flower flower1"></div>
+                        <div class="flower flower2"></div>
+                        <div class="flower flower3"></div>
+                    </div>
+                </div>
+                
+                <!-- Birds Flying -->
+                <div class="birds-container">
+                    <div class="bird bird-1">
+                        <svg viewBox="0 0 40 30" class="bird-svg">
+                            <ellipse cx="20" cy="15" rx="12" ry="8" fill="#FFB347"/>
+                            <circle cx="10" cy="14" r="5" fill="#8B4513"/>
+                            <path d="M 5 15 L 0 10 L 2 15 L 0 20 Z" fill="#87CEEB"/>
+                            <path d="M 35 15 L 40 10 L 38 15 L 40 20 Z" fill="#87CEEB"/>
+                            <circle cx="8" cy="13" r="1.5" fill="black"/>
+                            <path d="M 28 14 L 32 12 L 30 15 Z" fill="#FFB347"/>
+                        </svg>
+                    </div>
+                    <div class="bird bird-2">
+                        <svg viewBox="0 0 40 30" class="bird-svg">
+                            <ellipse cx="20" cy="15" rx="12" ry="8" fill="#87CEEB"/>
+                            <circle cx="10" cy="14" r="5" fill="#4169E1"/>
+                            <path d="M 5 15 L 0 10 L 2 15 L 0 20 Z" fill="#FFD700"/>
+                            <path d="M 35 15 L 40 10 L 38 15 L 40 20 Z" fill="#FFD700"/>
+                            <circle cx="8" cy="13" r="1.5" fill="black"/>
+                            <path d="M 28 14 L 32 12 L 30 15 Z" fill="#87CEEB"/>
+                        </svg>
+                    </div>
+                    <div class="bird bird-3">
+                        <svg viewBox="0 0 40 30" class="bird-svg">
+                            <ellipse cx="20" cy="15" rx="12" ry="8" fill="#90EE90"/>
+                            <circle cx="10" cy="14" r="5" fill="#228B22"/>
+                            <path d="M 5 15 L 0 10 L 2 15 L 0 20 Z" fill="#FFA500"/>
+                            <path d="M 35 15 L 40 10 L 38 15 L 40 20 Z" fill="#FFA500"/>
+                            <circle cx="8" cy="13" r="1.5" fill="black"/>
+                            <path d="M 28 14 L 32 12 L 30 15 Z" fill="#90EE90"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="scene-label">الغابة الجميلة<br><small>The Beautiful Forest</small></div>
+                <div class="scene-info">
+                    <p>🌿 هذه غابة خضراء كثيفة تعج بالحياة</p>
+                    <p>This is a dense green forest full of life</p>
+                </div>
+            </div>
+
+            <!-- Scene 2: Leaf and Silkworm -->
+            <div id="scene2" class="scene">
+                <div class="scene2-background">
+                    <div class="sky"></div>
+                    <div class="sun sun-small"></div>
+                    <svg class="leaves-branch" viewBox="0 0 800 300">
+                        <defs>
+                            <radialGradient id="leafGradient" cx="30%" cy="30%">
+                                <stop offset="0%" style="stop-color:#7FD856;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#2D5016;stop-opacity:1" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Branch -->
+                        <line x1="150" y1="80" x2="650" y2="120" stroke="#8B4513" stroke-width="8"/>
+                        
+                        <!-- Leaves -->
+                        <ellipse id="targetLeaf" cx="300" cy="80" rx="35" ry="25" fill="url(#leafGradient)" transform="rotate(-25 300 80)"/>
+                        <ellipse cx="380" cy="95" rx="32" ry="22" fill="#7FD856" transform="rotate(15 380 95)"/>
+                        <ellipse cx="450" cy="105" rx="30" ry="20" fill="#7FD856" transform="rotate(-35 450 105)"/>
+                        <ellipse cx="520" cy="115" rx="35" ry="25" fill="url(#leafGradient)" transform="rotate(20 520 115)"/>
+                        <ellipse cx="600" cy="110" rx="33" ry="23" fill="#7FD856" transform="rotate(-10 600 110)"/>
+                        
+                        <!-- Leaf veins on main leaf -->
+                        <line x1="280" y1="70" x2="320" y2="90" stroke="#5a8c3a" stroke-width="1" opacity="0.6"/>
+                        <line x1="290" y1="65" x2="310" y2="95" stroke="#5a8c3a" stroke-width="1" opacity="0.6"/>
+                        <line x1="300" y1="60" x2="300" y2="100" stroke="#5a8c3a" stroke-width="1" opacity="0.6"/>
+                    </svg>
+                </div>
+                
+                <!-- Silkworm -->
+                <div id="silkworm" class="silkworm">
+                    <svg viewBox="0 0 60 30" class="silkworm-svg">
+                        <defs>
+                            <radialGradient id="silkwormGradient" cx="30%" cy="30%">
+                                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#DAA520;stop-opacity:1" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Body segments -->
+                        <circle cx="10" cy="15" r="6" fill="url(#silkwormGradient)"/>
+                        <circle cx="20" cy="15" r="7" fill="url(#silkwormGradient)"/>
+                        <circle cx="30" cy="15" r="7" fill="url(#silkwormGradient)"/>
+                        <circle cx="40" cy="15" r="7" fill="url(#silkwormGradient)"/>
+                        <circle cx="50" cy="15" r="6" fill="url(#silkwormGradient)"/>
+                        
+                        <!-- Head -->
+                        <circle cx="5" cy="15" r="5" fill="#DAA520"/>
+                        <!-- Eyes -->
+                        <circle cx="3" cy="13" r="1" fill="black"/>
+                        <circle cx="3" cy="17" r="1" fill="black"/>
+                        
+                        <!-- Legs -->
+                        <line x1="15" y1="21" x2="15" y2="27" stroke="#8B6914" stroke-width="1"/>
+                        <line x1="25" y1="22" x2="25" y2="28" stroke="#8B6914" stroke-width="1"/>
+                        <line x1="35" y1="22" x2="35" y2="28" stroke="#8B6914" stroke-width="1"/>
+                        <line x1="45" y1="21" x2="45" y2="27" stroke="#8B6914" stroke-width="1"/>
+                    </svg>
+                </div>
+                
+                <div class="scene-label">دودة القز تأكل الورقة<br><small>Silkworm Eats the Leaf</small></div>
+                <div class="scene-info">
+                    <p>🌿 ورقة النبات - Plant Leaf (ورقة نبات)</p>
+                    <p>🐛 دودة القز - Silkworm (دودة القز)</p>
+                    <p>دودة القز تتغذى على أوراق النبات</p>
+                    <p>Silkworm feeds on plant leaves</p>
+                </div>
+            </div>
+
+            <!-- Scene 3: Food Chain Progression -->
+            <div id="scene3" class="scene">
+                <div class="scene3-background">
+                    <div class="sky"></div>
+                    <div class="sun sun-small"></div>
+                    <div class="ground-level"></div>
+                </div>
+                
+                <!-- Silkworm (eaten) -->
+                <div id="scene3-silkworm" class="scene3-character">
+                    <svg viewBox="0 0 60 30" class="silkworm-svg-small">
+                        <circle cx="10" cy="15" r="5" fill="#FFD700"/>
+                        <circle cx="18" cy="15" r="6" fill="#FFD700"/>
+                        <circle cx="27" cy="15" r="6" fill="#FFD700"/>
+                        <circle cx="36" cy="15" r="6" fill="#FFD700"/>
+                        <circle cx="44" cy="15" r="5" fill="#FFD700"/>
+                        <circle cx="52" cy="15" r="4" fill="#DAA520"/>
+                    </svg>
+                </div>
+                
+                <!-- Sparrow -->
+                <div id="scene3-sparrow" class="scene3-character sparrow-position">
+                    <svg viewBox="0 0 60 50" class="bird-large-svg">
+                        <defs>
+                            <radialGradient id="sparrowGradient" cx="35%" cy="35%">
+                                <stop offset="0%" style="stop-color:#D2B48C;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#8B7355;stop-opacity:1" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Body -->
+                        <ellipse cx="30" cy="25" rx="18" ry="15" fill="url(#sparrowGradient)"/>
+                        <!-- Head -->
+                        <circle cx="15" cy="22" r="8" fill="#A0826D"/>
+                        <!-- Eye -->
+                        <circle cx="12" cy="20" r="2" fill="black"/>
+                        <!-- Beak -->
+                        <polygon points="10,22 5,21 10,23" fill="#DAA520"/>
+                        <!-- Wings -->
+                        <ellipse cx="28" cy="26" rx="12" ry="8" fill="#8B7355"/>
+                        <!-- Tail -->
+                        <path d="M 48 28 Q 58 25, 60 30 Q 58 35, 48 32" fill="#8B7355"/>
+                        <!-- Legs -->
+                        <line x1="32" y1="38" x2="32" y2="46" stroke="#8B4513" stroke-width="2"/>
+                        <line x1="28" y1="38" x2="28" y2="46" stroke="#8B4513" stroke-width="2"/>
+                        <!-- Feet -->
+                        <line x1="28" y1="46" x2="25" y2="48" stroke="#8B4513" stroke-width="1"/>
+                        <line x1="28" y1="46" x2="31" y2="48" stroke="#8B4513" stroke-width="1"/>
+                        <line x1="32" y1="46" x2="29" y2="48" stroke="#8B4513" stroke-width="1"/>
+                        <line x1="32" y1="46" x2="35" y2="48" stroke="#8B4513" stroke-width="1"/>
+                    </svg>
+                </div>
+                
+                <!-- Hawk -->
+                <div id="scene3-hawk" class="scene3-character hawk-position">
+                    <svg viewBox="0 0 70 60" class="bird-large-svg">
+                        <defs>
+                            <radialGradient id="hawkGradient" cx="35%" cy="35%">
+                                <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Body -->
+                        <ellipse cx="35" cy="30" rx="20" ry="18" fill="url(#hawkGradient)"/>
+                        <!-- Head -->
+                        <circle cx="18" cy="26" r="10" fill="#654321"/>
+                        <!-- Eye -->
+                        <circle cx="14" cy="24" r="2.5" fill="gold"/>
+                        <!-- Hooked Beak -->
+                        <path d="M 12 26 Q 8 25, 6 28 Q 8 30, 12 28" fill="#DAA520"/>
+                        <!-- Wings (large) -->
+                        <path d="M 32 32 Q 50 20, 65 35 Q 50 50, 32 40" fill="#654321"/>
+                        <!-- Tail feathers -->
+                        <path d="M 55 32 L 68 28 M 55 32 L 70 32 M 55 32 L 68 36" stroke="#654321" stroke-width="2" fill="none"/>
+                        <!-- Talons -->
+                        <line x1="35" y1="45" x2="35" y2="55" stroke="#DAA520" stroke-width="3"/>
+                        <line x1="31" y1="45" x2="28" y2="55" stroke="#DAA520" stroke-width="2"/>
+                        <line x1="39" y1="45" x2="42" y2="55" stroke="#DAA520" stroke-width="2"/>
+                    </svg>
+                </div>
+                
+                <div class="scene-label">السلسلة الغذائية تتطور<br><small>Food Chain Progresses</small></div>
+                <div class="scene-info">
+                    <p>🐛 دودة القز - Silkworm (دودة القز)</p>
+                    <p>🐦 طائر الدوري - Sparrow (طائر الدوري)</p>
+                    <p>🦅 الصقر - Hawk (الصقر)</p>
+                    <p>كل حيوان يتغذى على الذي قبله</p>
+                    <p>Each animal feeds on the one before it</p>
+                </div>
+            </div>
+
+            <!-- Scene 4: Complete Food Chain Diagram -->
+            <div id="scene4" class="scene">
+                <div class="scene4-background">
+                    <div class="sky-gradient"></div>
+                </div>
+                
+                <div class="food-chain-diagram">
+                    <div class="chain-container">
+                        <!-- 1. Plant Leaf -->
+                        <div class="chain-item leaf-item">
+                            <div class="organism">
+                                <svg viewBox="0 0 80 60" class="organism-svg">
+                                    <defs>
+                                        <radialGradient id="leafGrad2" cx="30%" cy="30%">
+                                            <stop offset="0%" style="stop-color:#7FD856;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#2D5016;stop-opacity:1" />
+                                        </radialGradient>
+                                    </defs>
+                                    <ellipse cx="40" cy="30" rx="30" ry="20" fill="url(#leafGrad2)"/>
+                                    <line x1="40" y1="10" x2="40" y2="50" stroke="#5a8c3a" stroke-width="2"/>
+                                    <line x1="30" y1="25" x2="50" y2="25" stroke="#5a8c3a" stroke-width="1" opacity="0.6"/>
+                                    <line x1="25" y1="30" x2="55" y2="30" stroke="#5a8c3a" stroke-width="1" opacity="0.6"/>
+                                    <line x1="30" y1="35" x2="50" y2="35" stroke="#5a8c3a" stroke-width="1" opacity="0.6"/>
+                                </svg>
+                            </div>
+                            <div class="label-ar">ورقة نبا��</div>
+                            <div class="label-en">Plant Leaf</div>
+                            <div class="level-badge">Level 1: Producer</div>
+                        </div>
+
+                        <!-- Arrow 1 -->
+                        <div class="arrow">
+                            <svg viewBox="0 0 100 40" class="arrow-svg">
+                                <defs>
+                                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                        <polygon points="0 0, 10 3, 0 6" fill="#FF6B6B" />
+                                    </marker>
+                                </defs>
+                                <path d="M 10 20 L 80 20" stroke="#FF6B6B" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                                <text x="50" y="12" text-anchor="middle" fill="#FF6B6B" font-size="10" font-weight="bold">يأكل</text>
+                                <text x="50" y="35" text-anchor="middle" fill="#FF6B6B" font-size="9">eats</text>
+                            </svg>
+                        </div>
+
+                        <!-- 2. Silkworm -->
+                        <div class="chain-item silkworm-item">
+                            <div class="organism">
+                                <svg viewBox="0 0 80 50" class="organism-svg">
+                                    <defs>
+                                        <radialGradient id="wormGrad" cx="30%" cy="30%">
+                                            <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#DAA520;stop-opacity:1" />
+                                        </radialGradient>
+                                    </defs>
+                                    <circle cx="15" cy="25" r="7" fill="url(#wormGrad)"/>
+                                    <circle cx="28" cy="25" r="8" fill="url(#wormGrad)"/>
+                                    <circle cx="42" cy="25" r="8" fill="url(#wormGrad)"/>
+                                    <circle cx="56" cy="25" r="8" fill="url(#wormGrad)"/>
+                                    <circle cx="68" cy="25" r="7" fill="url(#wormGrad)"/>
+                                    <circle cx="10" cy="25" r="6" fill="#DAA520"/>
+                                    <circle cx="8" cy="23" r="1.5" fill="black"/>
+                                </svg>
+                            </div>
+                            <div class="label-ar">دودة القز</div>
+                            <div class="label-en">Silkworm</div>
+                            <div class="level-badge">Level 2: Consumer 1</div>
+                        </div>
+
+                        <!-- Arrow 2 -->
+                        <div class="arrow">
+                            <svg viewBox="0 0 100 40" class="arrow-svg">
+                                <defs>
+                                    <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                        <polygon points="0 0, 10 3, 0 6" fill="#FF6B6B" />
+                                    </marker>
+                                </defs>
+                                <path d="M 10 20 L 80 20" stroke="#FF6B6B" stroke-width="3" fill="none" marker-end="url(#arrowhead2)"/>
+                                <text x="50" y="12" text-anchor="middle" fill="#FF6B6B" font-size="10" font-weight="bold">يأكل</text>
+                                <text x="50" y="35" text-anchor="middle" fill="#FF6B6B" font-size="9">eats</text>
+                            </svg>
+                        </div>
+
+                        <!-- 3. Sparrow -->
+                        <div class="chain-item sparrow-item">
+                            <div class="organism">
+                                <svg viewBox="0 0 80 60" class="organism-svg">
+                                    <defs>
+                                        <radialGradient id="sparrowGrad2" cx="35%" cy="35%">
+                                            <stop offset="0%" style="stop-color:#D2B48C;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#8B7355;stop-opacity:1" />
+                                        </radialGradient>
+                                    </defs>
+                                    <ellipse cx="40" cy="28" rx="16" ry="14" fill="url(#sparrowGrad2)"/>
+                                    <circle cx="26" cy="26" r="8" fill="#A0826D"/>
+                                    <circle cx="23" cy="24" r="2" fill="black"/>
+                                    <polygon points="20,26 15,25 20,27" fill="#DAA520"/>
+                                    <ellipse cx="37" cy="28" rx="12" ry="8" fill="#8B7355"/>
+                                    <path d="M 52 30 Q 60 27, 62 32 Q 60 35, 52 32" fill="#8B7355"/>
+                                    <line x1="38" y1="40" x2="38" y2="48" stroke="#8B4513" stroke-width="2"/>
+                                    <line x1="34" y1="40" x2="34" y2="48" stroke="#8B4513" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="label-ar">طائر الدوري</div>
+                            <div class="label-en">Sparrow</div>
+                            <div class="level-badge">Level 3: Consumer 2</div>
+                        </div>
+
+                        <!-- Arrow 3 -->
+                        <div class="arrow">
+                            <svg viewBox="0 0 100 40" class="arrow-svg">
+                                <defs>
+                                    <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                        <polygon points="0 0, 10 3, 0 6" fill="#FF6B6B" />
+                                    </marker>
+                                </defs>
+                                <path d="M 10 20 L 80 20" stroke="#FF6B6B" stroke-width="3" fill="none" marker-end="url(#arrowhead3)"/>
+                                <text x="50" y="12" text-anchor="middle" fill="#FF6B6B" font-size="10" font-weight="bold">يأكل</text>
+                                <text x="50" y="35" text-anchor="middle" fill="#FF6B6B" font-size="9">eats</text>
+                            </svg>
+                        </div>
+
+                        <!-- 4. Hawk -->
+                        <div class="chain-item hawk-item">
+                            <div class="organism">
+                                <svg viewBox="0 0 80 70" class="organism-svg">
+                                    <defs>
+                                        <radialGradient id="hawkGrad2" cx="35%" cy="35%">
+                                            <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#654321;stop-opacity:1" />
+                                        </radialGradient>
+                                    </defs>
+                                    <ellipse cx="40" cy="32" rx="18" ry="16" fill="url(#hawkGrad2)"/>
+                                    <circle cx="26" cy="30" r="10" fill="#654321"/>
+                                    <circle cx="22" cy="28" r="2.5" fill="gold"/>
+                                    <path d="M 20 30 Q 16 29, 14 32 Q 16 34, 20 32" fill="#DAA520"/>
+                                    <path d="M 36 34 Q 54 22, 68 36 Q 54 50, 36 42" fill="#654321"/>
+                                    <path d="M 60 34 L 72 30 M 60 34 L 74 34 M 60 34 L 72 38" stroke="#654321" stroke-width="2" fill="none"/>
+                                    <line x1="40" y1="48" x2="40" y2="58" stroke="#DAA520" stroke-width="2.5"/>
+                                    <line x1="36" y1="48" x2="33" y2="58" stroke="#DAA520" stroke-width="2"/>
+                                    <line x1="44" y1="48" x2="47" y2="58" stroke="#DAA520" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="label-ar">الصقر</div>
+                            <div class="label-en">Hawk</div>
+                            <div class="level-badge">Level 4: Consumer 3 (Predator)</div>
+                        </div>
+                    </div>
+
+                    <!-- Energy Flow Info -->
+                    <div class="energy-info">
+                        <h3>⚡ تدفق الطاقة في السلسلة الغذائية</h3>
+                        <h3>Energy Flow in the Food Chain</h3>
+                        <div class="energy-levels">
+                            <div class="energy-level">
+                                <div class="energy-bar" style="width: 100%;"></div>
+                                <p>ورقة النبات - 100% من الطاقة</p>
+                            </div>
+                            <div class="energy-level">
+                                <div class="energy-bar" style="width: 70%;"></div>
+                                <p>دودة القز - 70% من الطاقة</p>
+                            </div>
+                            <div class="energy-level">
+                                <div class="energy-bar" style="width: 40%;"></div>
+                                <p>طائر الدوري - 40% من الطاقة</p>
+                            </div>
+                            <div class="energy-level">
+                                <div class="energy-bar" style="width: 15%;"></div>
+                                <p>الصقر - 15% من الطاقة</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scene-label">السلسلة الغذائية الكاملة<br><small>Complete Food Chain</small></div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="control-btn prev-btn" onclick="previousScene()">← السابق</button>
+            <div class="scene-indicator">
+                <span class="dot active" onclick="goToScene(1)"></span>
+                <span class="dot" onclick="goToScene(2)"></span>
+                <span class="dot" onclick="goToScene(3)"></span>
+                <span class="dot" onclick="goToScene(4)"></span>
+            </div>
+            <button class="control-btn next-btn" onclick="nextScene()">التالي →</button>
+        </div>
+
+        <!-- Auto-play Controls -->
+        <div class="autoplay-controls">
+            <button class="play-btn" id="playBtn" onclick="toggleAutoPlay()">▶ تشغيل</button>
+            <div class="scene-timer">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <h2>حول هذا المشروع</h2>
+            <p><strong>About This Project</strong></p>
+            <p>هذا مشروع تعليمي يوضح سلسلة الغذاء في الغابة. يتعلم الطلاب كيف تتحرك الطاقة من النبات إلى الحيوانات.</p>
+            <p>This educational project demonstrates the food chain in a forest. Students learn how energy flows from plants to animals.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="sounds.js"></script>
+</body>
+</html>
